@@ -2,7 +2,7 @@ const fs = require('fs');
 
 module.exports = function(app) {
   app.get("/", function(req, res) {
-    return res.send("Welcome to FSSM API Service.");
+    return res.send("Welcome to Todo API Service.");
   });
   return fs.readdir('./src/routes/', function(err, files) {
     if(files.length > 0){
