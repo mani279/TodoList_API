@@ -7,6 +7,7 @@ const http          	 = require('http');
 const morgan        	 = require('morgan');
 
 //local imports
+const authenticate 		 = require('./src/middlewares/authentication');
 const config        	 = require('./src/config');
 const httpStatusCode 	 = require('./src/lib/http-status-codes');
 const responseHandler	 = require('./src/lib/response-handler');
@@ -21,7 +22,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cors());
 app.use(device.capture());
 app.use(morgan('dev'));
-
+app.use(authenticate);
 
 // handled invalid json exception
 app.use(function(err, req, res, next) {

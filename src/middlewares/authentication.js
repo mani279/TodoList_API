@@ -6,7 +6,7 @@ const config         = require('../config');
 const response       = require('../lib/response-handler');
 
 
-to_authenticate      = []
+to_authenticate      = ['todo']
 
 module.exports = function(req, res, next) {
   var decodedToken, e, path, token, userId;
