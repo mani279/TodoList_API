@@ -62,9 +62,7 @@ router.post('/', function(req, res) {
 * @apiHeader {String} Authorization Todos authentication token: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.IjEwX1dlZCBTZXAgMjYgMjAxOCAxOToyMzoxNSBHTVQrMDUzMCAoSVNUKSI.Qd4423KBpChmjIypVuCG_dFbT3spqsMyf07XS-2Ov6M.
 * 
 * @apiParam {String} limit Pagination limit.
-* @apiParam {String} offset Pagination offset.
-* @apiParam {String} q Search query by title.
-* @apiParam {String} sort Sort by field - sort=title-desc
+* @apiParam {String} page Pagination page.
 * 
 * @apiSuccess (200) {Json} Todo information.
 * @apiSuccessExample {json} Success-Response:
@@ -121,7 +119,7 @@ router.get('/:id', function(req, res) {
 });
 
 /*
-* @api {delete} /todos/ Delete Todo
+* @api {delete} /todos/:id Delete Todo
 * @apiName Delete Todo
 * @apiGroup Todo
 * 
@@ -139,7 +137,7 @@ router.get('/:id', function(req, res) {
 * 		"error": []
 * 	}
 */
-router.delete('/', function(req, res) {
+router.delete('/:id', function(req, res) {
   return todo.delete(req, res);
 });
 
@@ -166,8 +164,8 @@ router.delete('/', function(req, res) {
 * 		"error": []
 * 	}
 */
-router.patch('/:id', function(req, res) {
-  return todo.patchTodo(req, res);
+router.put('/:id', function(req, res) {
+  return todo.update(req, res);
 });
 
 

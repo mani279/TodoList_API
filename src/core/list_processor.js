@@ -24,13 +24,13 @@ ListProcessor = (function() {
         options.pagination.limit = config.pagination.limit;
       }
       // query offset
-      if (params.offset) {
+      /*if (params.offset && !params.page) {
         options.pagination.skip = parseInt(params.offset);
       } else {
         options.pagination.skip = config.pagination.offset;
-      }
+      }*/
       // query page
-      if (params.page) {
+      if (params.page && !params.offset) {
         options.pagination.skip = parseInt((options.pagination.limit * params.page) - options.pagination.limit)
       } else {
         options.pagination.skip = parseInt((options.pagination.limit * 1) - options.pagination.limit)

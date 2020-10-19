@@ -11,11 +11,6 @@ ObjectId  = Schema.Types.Oid;
 
 schema = new Schema({
   id: ObjectId,
-  todoname: {
-    type: String,
-    trim: true,
-    unique: true
-  },
   title: {
     type: String,
     trim: true,
@@ -65,7 +60,7 @@ Todos.create = function(body, callback) {
     const todo = new Todos({title: body.title, description: body.description})
     todo.save()
     .then(todo => {
-        callback(null,body);
+      callback(null,body);
     })
     .catch(error =>  {
         return callback(util.formatError(error), null);
@@ -76,7 +71,6 @@ Todos.create = function(body, callback) {
 Todos.get = function(queryParams, params,userData, callback) {
   var options = db.ListProcessor.process(queryParams);
   options.conditions = {};
-  
   if (params.id) {
     options.conditions._id = db.Database.Types.ObjectId(params.id.toString());
   }
@@ -84,7 +78,7 @@ Todos.get = function(queryParams, params,userData, callback) {
     
     // get todos
     function(callback) {
-      return Todos.find(options.conditions,
+      return Todos.find(options.conditions,{},options.pagination,
     function(error,
     users) {
         if (error) {
@@ -115,5 +109,72 @@ Todos.get = function(queryParams, params,userData, callback) {
 };
 
 
+Todos.delete = function(params, body, callback) {
+  let options = {}
+  options.conditions = {};
+
+  if (params.id) {
+    options.conditions._id = db.Database.Types.ObjectId(params.id.toString());
+  }
+  return Todos.deleteOne(options.conditions, function(error, result) {
+    if (error) {
+
+      return callback({
+        error: [
+          {
+            code: 0,
+            message: "Error occured when deleting todos."
+          }
+        ]
+      }, null);
+    }
+    if (!result.n) {
+      return callback({
+        error: [
+          {
+            code: 0,
+            message: "Todo does not exist."
+          }
+        ]
+      }, null);
+    }
+    return callback(null, {
+      data: [],
+      count: result.n
+    });
+  });
+};
+
+
+Todos.update = function(params, body, callback) {
+  let options = {}
+  options.conditions = {};
+
+  if (params.id) {
+    options.conditions._id = db.Database.Types.ObjectId(params.id.toString());
+  }
+  where_obj = {
+    _id: params.id
+  };
+  modifications_obj = {
+    $set: {
+      title: body.title,
+      description: body.description,
+      updated_at: Date.now()
+    }
+  };
+  return Todos.updateOne(where_obj, modifications_obj, function(error, result) {
+    if (error) {
+      return callback(util.formatError(error, "Error in updating todos."), null);
+    }
+    if (!result.n && !result.nModified) {
+      return callback(util.formatError(null, "Todo does not exist."), null);
+    }
+    return callback(null, {
+      data: [true],
+      count: 1
+    });
+  });
+};
 
 module.exports = Todos;

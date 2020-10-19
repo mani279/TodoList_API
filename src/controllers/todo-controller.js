@@ -20,52 +20,38 @@ Todo = (function() {
           res.status(httpStatusCode.BAD_REQUEST).send(context.responseError(err));
           return null;
         }
-        return res.status(httpStatusCode.OK).send(context.responseGet(result));
+        return res.status(httpStatusCode.CREATED).send(context.responseGet(result));
       });
     }
 
     get(req,res){
-        return util.async.waterfall([
-          function(callback) {
-            return model.todo.get(req.query, req.params, req.headers.userLoginDetails, callback);
-        },
-        function(todos, callback) {
-          return model.todo.getTotalCount({}, req.headers.userLoginDetails._id, function(err, totalCount) {
-            if (err) {
-              return callback(err, null);
-            }
-            todos.totalCount = totalCount;
-            return callback(null, todos);        
-          });
+      return model.todo.get(req.query, req.params, req.headers.userLoginDetails, function(error, result) {
+        if (error) {
+          res.status(httpStatusCode.BAD_REQUEST).send(context.responseError (error));
+          return;
         }
-        ], function (error, result) {
-          
-          if (error) {
-            res.status(httpStatusCode.BAD_REQUEST).send(context.responseError (error));
-            return;
-          }
-          return res.status(httpStatusCode.OK).send(context.responseCreate(result));
-        });
+        return res.status(httpStatusCode.OK).send(context.responseCreate(result));
+      });
     }
 
     delete(req, res) {
-        return model.todo.create(req.body, function(err, result) {
-          if (err) {
-            res.status(httpStatusCode.BAD_REQUEST).send(context.responseError(err));
-            return null;
-          }
-          return res.status(httpStatusCode.OK).send(context.responseGet(result));
-        });
+      return model.todo.delete(req.params, req.body, function(err, result) {
+        if (err) {
+          res.status(httpStatusCode.BAD_REQUEST).send(context.responseError(err));
+          return null;
+        }
+        return res.status(httpStatusCode.OK).send(context.responseGet(result));
+      });
     }
 
     update(req, res) {
-        return model.todo.create(req.body, function(err, result) {
-          if (err) {
-            res.status(httpStatusCode.BAD_REQUEST).send(context.responseError(err));
-            return null;
-          }
-          return res.status(httpStatusCode.OK).send(context.responseGet(result));
-        });
+      return model.todo.update(req.params, req.body, function(err, result) {
+        if (err) {
+          res.status(httpStatusCode.BAD_REQUEST).send(context.responseError(err));
+          return null;
+        }
+        return res.status(httpStatusCode.OK).send(context.responseGet(result));
+      });
     }
 
   };
