@@ -1,0 +1,7 @@
+{
+    "name": "TodoList",
+    "version": "0.1.0",
+    "description": "apiDoc for Todo application",
+    "title": "TODO LIST",
+    "url" : "http://localhost:9000/v1"
+}
