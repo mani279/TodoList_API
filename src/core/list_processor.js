@@ -12,26 +12,26 @@ ListProcessor = (function() {
     * @param {*} req - request to be sent
     * @return options formed as an object
     */
-    process(req) {
+    process(params) {
       var options, sorts;
       options = {};
       options.pagination = {};
       
       // query limit
-      if (req.query.limit) {
-        options.pagination.limit = parseInt(req.query.limit);
+      if (params.limit) {
+        options.pagination.limit = parseInt(params.limit);
       } else {
         options.pagination.limit = config.pagination.limit;
       }
       // query offset
-      if (req.query.offset) {
-        options.pagination.skip = parseInt(req.query.offset);
+      /*if (params.offset && !params.page) {
+        options.pagination.skip = parseInt(params.offset);
       } else {
         options.pagination.skip = config.pagination.offset;
-      }
+      }*/
       // query page
-      if (req.query.page) {
-        options.pagination.skip = parseInt((options.pagination.limit * req.query.page) - options.pagination.limit)
+      if (params.page && !params.offset) {
+        options.pagination.skip = parseInt((options.pagination.limit * params.page) - options.pagination.limit)
       } else {
         options.pagination.skip = parseInt((options.pagination.limit * 1) - options.pagination.limit)
       }
@@ -40,9 +40,9 @@ ListProcessor = (function() {
         'updated_at': -1
       };
       // query sort
-      if (req.query.sort) {
+      if (params.sort) {
         options.sort = {};
-        sorts = req.query.sort.toString().trim().split(',');
+        sorts = params.sort.toString().trim().split(',');
         sorts.forEach(function(val) {
           var sort;
           val = val.trim();
