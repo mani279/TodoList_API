@@ -7,10 +7,10 @@ list_processor = require('./list_processor');
 
 connection_string = 'mongodb://' + config.database.host + ':' + config.database.port + '/' + config.database.database;
 mongoose.connect(connection_string, {
-  // auth: {
-  //   user: config.database.username,
-  //   password: config.database.password
-  // },
+  auth: {
+    user: config.database.username,
+    password: config.database.password
+  },
   useNewUrlParser: true,
   useUnifiedTopology: true
 }).then(function(res) {
